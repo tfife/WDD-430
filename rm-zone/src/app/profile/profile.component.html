@@ -1,0 +1,23 @@
+<p>profile works!</p>
+<!-- Photo, name, info, year range, etc. -->
+<div class="container">
+    
+    <div class="row">
+        <span class="pull-left" style="font-size: small;">
+            <img 
+            [src]="user.profileImageUrl"
+            alt="{{ user.name }}" 
+            class="img-responsive" 
+            style="max-height: 112px; max-width: 112px;">
+        </span>
+        <div>{{ user.name }}</div>
+        <div class="pull-right">
+            <span>{{ user.name }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- subsection header -->
+<!-- subsection -->
+<rmzone-profile-subheader></rmzone-profile-subheader>
+<router-outlet></router-outlet>
