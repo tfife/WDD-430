@@ -11,7 +11,7 @@ import { MessageService } from '../message.service';
 })
 export class MessageEditComponent implements OnInit {
 
-  currentSender: string = 'Tori Fife'
+  currentSender: string = '5fc5c0543177278302829daa'
   @ViewChild('subject', { static: false }) subjectInputRef: ElementRef;
   @ViewChild('msgText', { static: false }) msgTextInputRef: ElementRef;
   
@@ -23,7 +23,7 @@ export class MessageEditComponent implements OnInit {
   onSendMessage() {
     const subject = this.subjectInputRef.nativeElement.value;
     const msgText = this.msgTextInputRef.nativeElement.value;
-    const newMessage = new Message('-1', subject, msgText, this.currentSender);
+    const newMessage = new Message('', subject, msgText, this.currentSender, null);
     this.messageService.addMessage(newMessage);
   }
 

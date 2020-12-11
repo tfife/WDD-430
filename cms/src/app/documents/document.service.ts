@@ -16,38 +16,32 @@ export class DocumentService {
     this.getDocuments();
    }
 
+   sortAndSend() {
+    this.maxDocumentId = this.getMaxId();
+    this.documents.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    })
+    this.documentListChangedEvent.next(this.documents.slice());
+   }
+
    getDocuments() {
-     this.http.get('https://wdd430-cms.firebaseio.com/documents.json').subscribe(
+     this.http.get('http://localhost:3000/documents').subscribe(
        //success method
-       (documents: Document[]) => {
-         this.documents = documents;
-         this.maxDocumentId = this.getMaxId();
-         this.documents.sort((a, b) => {
-           if (a.name < b.name) {
-             return -1;
-           }
-           if (a.name > b.name) {
-             return 1;
-           }
-           return 0;
-         })
-         this.documentListChangedEvent.next(this.documents.slice());
+       (documents: any) => {
+         console.log(documents);
+         this.documents = documents.documents;
+         this.sortAndSend();
        },
        //error method
        (error: any) => {
          console.log(error);
        });
-   }
-
-   storeDocuments() {
-     let stringData: string = JSON.stringify(this.documents.slice());
-     const headers: HttpHeaders = new HttpHeaders().set('content-type', 'application/json');
-     this.http.put(
-       'https://wdd430-cms.firebaseio.com/documents.json', 
-       stringData, 
-       {'headers': headers}).subscribe(() => {
-         this.documentListChangedEvent.next(this.documents.slice());
-       })
    }
 
    getDocument(id: string) {
@@ -70,41 +64,77 @@ export class DocumentService {
      return maxId;
    }
 
-   addDocument(newDocument: Document) {
-     if (!newDocument) {
-       return;
-     }
-     this.maxDocumentId++;
-     newDocument.id = this.maxDocumentId.toString();
-     this.documents.push(newDocument);
-     this.storeDocuments();
-   }
 
-   updateDocument(originalDocument: Document, newDocument: Document) {
-     if (!originalDocument || !newDocument) {
-       return;
-     }
-    let pos = this.documents.indexOf(originalDocument);
+  addDocument(document: Document) {
+    if (!document) {
+      return;
+    }
+
+    // make sure id of the new Document is empty
+    document.id = '';
+
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    // add to database
+    this.http.post<{ message: string, document: Document }>('http://localhost:3000/documents',
+      document,
+      { headers: headers })
+      .subscribe(
+        (responseData) => {
+          // add new document to documents
+          this.documents.push(responseData.document);
+          this.sortAndSend();
+        }
+      );
+  }
+
+  updateDocument(originalDocument: Document, newDocument: Document) {
+    if (!originalDocument || !newDocument) {
+      return;
+    }
+
+    const pos = this.documents.findIndex(d => d.id === originalDocument.id);
+
     if (pos < 0) {
       return;
     }
 
+    // set the id of the new Document to the id of the old Document
     newDocument.id = originalDocument.id;
-    this.documents[pos] = newDocument;
-    this.storeDocuments();
-   }
+    newDocument._id = originalDocument._id;
+
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    // update database
+    this.http.put('http://localhost:3000/documents/' + originalDocument.id,
+      newDocument, { headers: headers })
+      .subscribe(
+        (response: Response) => {
+          this.documents[pos] = newDocument;
+          this.sortAndSend();
+        }
+      );
+  }
    
-   deleteDocument(document: Document) {
-    if(!document) {
+  deleteDocument(document: Document) {
+
+    if (!document) {
       return;
     }
 
-    const pos = this.documents.indexOf(document);
+    const pos = this.documents.findIndex(d => d.id === document.id);
+
     if (pos < 0) {
       return;
     }
 
-    this.documents.splice(pos, 1);
-    this.storeDocuments();
+    // delete from database
+    this.http.delete('http://localhost:3000/documents/' + document.id)
+      .subscribe(
+        (response: Response) => {
+          this.documents.splice(pos, 1);
+          this.sortAndSend();
+        }
+      );
   }
 }
