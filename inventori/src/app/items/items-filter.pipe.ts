@@ -10,7 +10,7 @@ export class ItemsFilterPipe implements PipeTransform {
     let filteredArray: Item[] = [];
     if (term && term.length > 0) {
       filteredArray = items.filter(
-        (item: Item) => item.name.toLowerCase().includes(term.toLowerCase()) || item.description.toLowerCase().includes(term.toLowerCase())
+        (item: Item) => item.name.toLowerCase().includes(term.toLowerCase()) || (item.description && item.description.toLowerCase().includes(term.toLowerCase()))
       );
     }
     if (filteredArray.length < 1) {

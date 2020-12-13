@@ -59,10 +59,8 @@ export class ItemEditComponent implements OnInit {
     if (!this.editMode) {
       return;
     }
-    else 
-    {
-      this.itemService.deleteItem(this.originalItem);
-    }
+    this.itemService.deleteItem(this.originalItem);
+    this.router.navigate(['/items']);
   }
 
 }
