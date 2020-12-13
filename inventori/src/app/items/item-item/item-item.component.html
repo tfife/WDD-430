@@ -1,0 +1,22 @@
+<div class="itemWrapper">
+    <a style="cursor: pointer;"
+    [routerLink] = "[item.id]"
+    routerLinkActive="selected" 
+    class="list-group-item clearfix">
+
+        <div class="horizontalFlex">
+            <div class="itemStatusBox" [ngStyle]="{'background-color': statusColor}">
+            </div>
+            <div>
+                <h4 class="list-group-item-heading">{{ item.name }}</h4>
+            </div>
+        </div>
+
+        <div class="itemDetails">
+            <strong>Description:</strong>
+            {{item.description}}
+        </div>
+    </a>
+    <a class="rightHandButton btn btn-primary" [routerLink]="[item.id + '/edit']">Edit</a>
+    
+</div>

@@ -30,14 +30,14 @@ export class ContactListComponent implements OnInit {
         this.contacts = contactList;
       }
     )
-}
+  }
 
-search(value: string) {
-  this.term = value;
-}
+  search(value: string) {
+    this.term = value;
+  }
 
-ngOnDestroy(): void {
-  this.subscription.unsubscribe()
-}
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe()
+  }
 
 }

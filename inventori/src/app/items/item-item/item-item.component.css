@@ -1,0 +1,40 @@
+.item {
+    width: 100%;
+}
+.selected {
+    border: 3px solid purple;
+}
+.itemDetails {
+    display: none;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+.selected .itemDetails {
+    display: block;
+}
+.itemStatusBox {
+    height: 40px;
+    width: 40px;
+    background-color: red;
+    border: 5px solid black;
+    margin-right: 20px;
+    border-radius: 30px;
+}
+.horizontalFlex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: space-between;
+    position: relative;
+}
+.itemWrapper {
+    position: relative;
+}
+.rightHandButton {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+h4 {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}

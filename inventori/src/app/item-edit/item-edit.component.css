@@ -1,0 +1,11 @@
+.radio {
+    display: inline;
+    width: 100px;
+    background: blue;
+}
+
+.radioWrapper {
+    display: inline;
+    height: auto;
+    width: 100px;
+}
